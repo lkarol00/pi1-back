@@ -1,5 +1,9 @@
-var mqtt = require('mqtt')
+var mqtt = require('mqtt');
+var config = require('../config');
+
 const students = require('../models/student');
+const sessions = require('../models/session');
+
 const db = require('../services/db');
 
 const options = {
@@ -19,34 +23,27 @@ const options = {
   keepalive: 60,
 };
 
-var client = mqtt.connect('ws://localhost:1883', options);
+var client = mqtt.connect('ws://localhost:1883', config.mqtt_options);
 
-function connect(request, callback) {
-  //client.on('connect', () => {
-    client.subscribe('/data', err => { if(err) console.log(err)});
-    /*db.query("SELECT * FROM Student", (response) => {
-      //console.log(response);
-      return callback(response);
-    });*/
-    
-    //let idStudents = [1, 2, 3];
-    
-    let activate = `{"courseId": ${request.courseId}, "message": "ACTIVATE"}`
-    client.publish(`/estudiante/${request.studentId}`, activate);
-    /*idStudents.forEach((id) => {
-      client.publish(`/estudiante/${id}`, activate);
-    });*/
-  //});
+const connect = (request, callback) => {
+  //client.on('connect', () => {});
+  client.subscribe('/data', err => { if(err) console.log(err)});
+  let activate = `{"courseId": ${request.courseId}, "message": "ACTIVATE"}`
+  client.publish(`/estudiante/${request.studentId}`, activate);
+  return callback("CONNECTED");
 }
 
+client.subscribe('/data', err => { if(err) console.log(err)});
  
 client.on('message', (topic, message) => {
   if (topic == "/data"){
-    let resultJson = JSON.parse(message);  //2021-05-05 02:22:24
-    db.query(`INSERT INTO Session (date, studentId, courseId, temperature, movement, noise) VALUES ('2021-05-05 02:22:25', '${resultJson.studentId}', '${resultJson.courseId}', '${resultJson.temperature}', '${resultJson.movement}', '${resultJson.noise}') `);
-    console.log(resultJson);  
+    try {
+      let resultJson = JSON.parse(message); 
+      sessions.postSession(resultJson, (res) => console.log(resultJson));
+    } catch (SyntaxError) {
+      console.log("Incorrect data format")
+    }
   }
-  
 });
 
 // client.end()

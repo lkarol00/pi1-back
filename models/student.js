@@ -1,9 +1,18 @@
 const db = require('../services/db');
 
-function getStudents(course){
-    return db.query(
-        `SELECT student_id, course_id FROM Session WHERE course_id=${course}`
-    );
+function getStudentsByCourse(request, callback) {
+    db.query(`SELECT DISTINCT Student.id, Student.name FROM Session RIGHT JOIN Student ON Session.studentId=Student.id WHERE courseId=${request.courseId} `, (response) => {
+        console.log(response);
+        console.log(request);
+        return callback(response);
+    });
 }
 
-module.exports = { getStudents }
+function getStudents(request, callback) {
+    db.query(`SELECT * FROM Student`, (response) => {
+        console.log(response);
+        return callback(response);
+    });
+}
+
+module.exports = { getStudents, getStudentsByCourse }
