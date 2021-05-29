@@ -15,4 +15,11 @@ function getStudents(request, callback) {
     });
 }
 
-module.exports = { getStudents, getStudentsByCourse }
+function getStudent(request, callback) {
+    db.query(`SELECT * FROM Student WHERE id=${request.studentId}`, (response) => {
+        console.log(response);
+        return callback(response);
+    });
+}
+
+module.exports = { getStudents, getStudentsByCourse, getStudent }
