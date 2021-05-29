@@ -4,6 +4,7 @@ const mqtt_connection = require('../controller/connection');
 const studentModel = require('../models/student');
 const courseModel = require('../models/course');
 const sessionModel = require('../models/session');
+const loginModel = require('../models/login');
 
 const app = express();
 const cors = require('cors');
@@ -33,6 +34,20 @@ app.get('/connect', (req, res) => {
 app.get('/session', (req, res) => {
   sessionModel.getSessionsByStudent(req.query, (response) => res.send(response));
 });
+
+app.post('/signin', (req, res) => {
+  if (req.query.email && req.query.password){
+    loginModel.userExist(req.query, (response) => {
+      if (response.length == 0) res.send("The email doesn't exist");
+      else {
+        loginModel.verifyUser(req.query, (resp) => {
+          if (resp.length == 0) res.send("Wrong email or password!");
+          else res.send(resp);
+        });
+      }
+    });
+  } else res.send("It's missing email or password!");
+}); 
 
 // use it before all route definitions
 

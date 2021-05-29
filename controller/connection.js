@@ -4,26 +4,7 @@ var config = require('../config');
 const students = require('../models/student');
 const sessions = require('../models/session');
 
-const db = require('../services/db');
-
-const options = {
-  clientId: 'node_client',
-  username: mqtt.username,
-  password: mqtt.password,
-  useSSL: false,
-  //onSuccess: onAction,
-  //onFailure: onAction,
-  protocolId: 'MQTT',
-  protocolVersion: 5,
-  rejectUnauthorized: false,
-  clean: true,
-  //reconnectPeriod: 0,
-  //connectTimeout: 30 * 1000,
-  protocol: 'mqtt',
-  keepalive: 60,
-};
-
-var client = mqtt.connect('ws://localhost:1883', config.mqtt_options);
+var client = mqtt.connect('ws://test.mosquitto.org', config.mqtt_options);
 
 const connect = (request, callback) => {
   //client.on('connect', () => {});
