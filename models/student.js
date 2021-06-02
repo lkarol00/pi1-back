@@ -8,6 +8,13 @@ function getStudentsByCourse(request, callback) {
     });
 }
 
+function getStudentsIdsByCourse(request, callback) {
+    db.query(`SELECT DISTINCT studentId FROM Session WHERE courseId=${request.courseId}`, (response) => {
+        console.log(response);
+        return callback(response);
+    });
+}
+
 function getStudents(request, callback) {
     db.query(`SELECT * FROM Student`, (response) => {
         console.log(response);
@@ -22,4 +29,4 @@ function getStudent(request, callback) {
     });
 }
 
-module.exports = { getStudents, getStudentsByCourse, getStudent }
+module.exports = { getStudents, getStudentsByCourse, getStudent, getStudentsIdsByCourse }
