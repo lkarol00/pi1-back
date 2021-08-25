@@ -14,7 +14,7 @@ const config = {
     clientId: 'node_client',
     username: mqtt.username,
     password: mqtt.password,
-    useSSL: false,
+    /*useSSL: false,
     //onSuccess: onAction,
     //onFailure: onAction,
     protocolId: 'MQTT',
@@ -24,7 +24,16 @@ const config = {
     //reconnectPeriod: 0,
     //connectTimeout: 30 * 1000,
     protocol: 'mqtt',
+    keepalive: 60,*/
     keepalive: 60,
+    reconnectPeriod: 1000,
+    protocolId: 'MQIsdp', //
+    protocolVersion: 4,
+    rejectUnauthorized: false,
+    // protocol: 'mqtt',
+    clean: true,
+    encoding: 'utf8',
+    port: 1883
   }
 };
 

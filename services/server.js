@@ -43,6 +43,14 @@ app.get('/session', (req, res) => {
   sessionModel.getSessionsByStudent(req.query, (response) => res.send(response));
 });
 
+app.get('/actual-session', (req, res) => {
+  sessionModel.getLastSessionsByStudent(req.query, (response) => res.send(response));
+});
+
+app.get('/student/last-sessions', (req, res) => {
+  sessionModel.getLastTenSessionByStudent(req.query, (response) => res.send(response));
+});
+
 app.post('/login', (req, res) => {
   console.log(req.body, req.query)
   if (req.body.email && req.body.password){
