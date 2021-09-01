@@ -14,9 +14,18 @@ function getSessionsByStudent(request, callback){
 }
 
 function getLastTenSessionByStudent(request, callback){
-    db.query(`SELECT * FROM Session WHERE studentId=${request.studentId} AND courseId=${request.courseId} AND date >= '${date.convertSessionDate(request.sessionDate)}'
+    db.query(`SELECT studentId, courseId, noise FROM Session WHERE studentId=${request.studentId} AND courseId=${request.courseId} AND date >= '${date.convertSessionDate(request.sessionDate)}'
              ORDER BY date DESC LIMIT 10`, (response) => {
-        return callback(response);
+        var total = 0;
+        var avg = response.forEach((element) => {
+            total = total + element.noise;
+        });
+        var data = {
+            "studentId": request.studentId,
+            "courseId": request.courseId,
+            "mean": total / response.length
+        }
+        return callback(data);
     });
 }
 

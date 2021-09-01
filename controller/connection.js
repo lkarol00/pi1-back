@@ -16,7 +16,6 @@ const connect = (request, callback) => {
       client.publish(`/estudiante/${row.studentId}`, activate);
     });
   });
-  // client.publish(`/estudiante/${request.studentId}`, activate); // This is for one student
 
   return callback("CONNECTED");
 }
