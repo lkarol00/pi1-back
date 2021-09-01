@@ -8,6 +8,7 @@ const config = {
     password: env.DB_PASSWORD || 'password',
     database: env.DB_NAME || 'DB_PI',
     port: env.DB_PORT  || '3307',
+    connectionLimit: 10,
     timezone: "America/Bogota" 
   },
   mqtt_options:{
